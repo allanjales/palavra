@@ -1,0 +1,170 @@
+/*Main*/
+
+:root
+{
+	/*Green 50 https://material.io/design/color/the-color-system.html#tools-for-picking-colors*/
+	--background-color: #43A047;
+	--letter-space-border-color: #2E7D32;
+	--right: #388E3C;
+	--near:  #FFFFFF;
+	--wrong: #FFFFFF;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
+
+body
+{
+	margin: 0;
+	background-color: var(--background-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+*
+{
+	user-select: none;
+}
+
+.holder
+{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	flex-direction: column;
+	height: 100vh;
+}
+
+/*Header*/
+
+#title
+{
+	font-family: 'Rubik', sans-serif;
+	font-weight: 600;
+	color: #FFF;
+	font-size: 50px;
+}
+
+/*Board*/
+
+#board
+{
+	min-width: 100px;
+	min-height: 100px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.row
+{
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+}
+
+.letter_space
+{
+	width: 80px;
+	height: 80px;
+	background-color: var(--letter-space-border-color);
+	border-radius: 10px;
+	font-family: 'Rubik', sans-serif;
+	font-weight: 600;
+	text-transform: uppercase;
+	color: #FFF;
+	font-size: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+.edit_row > .letter_space
+{
+	width: 70px;
+	height: 70px;
+	background-color: transparent;
+	border-width: 5px;
+	border-color: var(--letter-space-border-color);
+	border-style: solid;
+	border-radius: 10px;
+}
+
+.edit_letter
+{
+	height: 60px !important;
+	border-bottom-width: 15px !important;
+}
+
+.right
+{
+	background-color: var(--right);
+}
+
+.near
+{
+	background-color: var(--near);
+}
+
+.wrong
+{
+	background-color: var(--wrong);
+}
+
+/*Keyboard*/
+
+#keyboard
+{
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+#keyboard kbd
+{
+	width: 50px;
+	height: 64px;
+	background-color: var(--letter-space-border-color);
+	border-radius: 10px;
+	font-family: 'Rubik', sans-serif;
+	font-weight: 600;
+	color: #FFF;
+	font-size: 24px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+#keyboard kbd span
+{
+	font-size: inherit;
+}
+
+#kbd_backspace
+{
+	margin-left: 10px;
+	width: 60px !important;
+}
+
+#kbd_enter
+{
+	margin-left: 10px;
+	width: 150px !important;
+}
+
+#keyboard .row
+{
+	gap: 5px;
+}
+
+#keyboard .row:nth-child(2)
+{
+	margin-left: 20px;
+}
+
+#keyboard .row:nth-child(3)
+{
+	margin-left: 40px;
+}
