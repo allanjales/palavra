@@ -2,12 +2,19 @@
 
 :root
 {
-	/*Green 50 https://material.io/design/color/the-color-system.html#tools-for-picking-colors*/
+	/*Green 50 https://material.io/design/color/the-color-system.html#tools-for-picking-colors #388E3C*/
 	--background-color: #43A047;
 	--letter-space-border-color: #2E7D32;
 	--right: #388E3C;
-	--near:  #FFFFFF;
-	--wrong: #FFFFFF;
+	--near:  #6da043;
+	--wrong: #0e2e10;
+
+	/*New according to twitter*/
+	--background-color: #1c2732;
+	--letter-space-border-color: #38444d;
+	--right: #43A047;
+	--near: #ea9a3e;
+	--wrong: #17191c;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
@@ -42,7 +49,7 @@ body
 	font-family: 'Rubik', sans-serif;
 	font-weight: 600;
 	color: #FFF;
-	font-size: 50px;
+	font-size: 36px;
 }
 
 /*Board*/
@@ -99,17 +106,22 @@ body
 
 .right
 {
-	background-color: var(--right);
+	background-color: var(--right) !important;
 }
 
 .near
 {
-	background-color: var(--near);
+	background-color: var(--near) !important;
 }
 
 .wrong
 {
-	background-color: var(--wrong);
+	background-color: var(--wrong) !important;
+}
+
+kbd.wrong
+{
+	color: #AAA !important;
 }
 
 /*Keyboard*/
