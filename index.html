@@ -13,7 +13,13 @@
 <body>
 	<div class="holder">
 		<header>
-			<div id="title">ALLAN</div>
+			<button>
+				<span id="help" class="material-icons-outlined">help_center</span>
+			</button>
+			<h1 id="title">ALLAN</h1>
+			<button>
+				<span id="stats" class="material-icons-outlined">assessment</span>
+			</button>
 		</header>
 		<main>
 			<div id="board">
@@ -97,6 +103,80 @@
 				<kbd class="letter">N</kbd>
 				<kbd class="letter">M</kbd>
 				<kbd id="kbd_enter">ENTER</kbd>
+			</div>
+		</div>
+	</div>
+	<div class="modal stats">
+		<div class="modal-content">
+			<p class="center">Progresso</p>
+			<div class="overview row">
+				<div>
+					<p class="m-0 value" id="games">1</p>
+					<p class="m-0">jogos</p>
+				</div>
+				<div>
+					<p class="m-0 value" id="victory_rate">100%</p>
+					<p class="m-0">de vitórias</p>
+				</div>
+				<div>
+					<p class="m-0 value" id="victory_sequence">1</p>
+					<p class="m-0">sequência de vitórias</p>
+				</div>
+				<div>
+					<p class="m-0 value" id="best_victory_sequence">1</p>
+					<p class="m-0">melhor sequência</p>
+				</div>
+			</div>
+			<div class="distribution">
+				<p class="center">Distribuição das tentativas</p>
+				<div class="row">
+					<p class="m-0 progress_title">1</p>
+					<div class="progress">
+						<span>0</span>
+					</div>
+				</div>
+				<div class="row">
+					<p class="m-0 progress_title">2</p>
+					<div class="progress">
+						<span>1</span>
+					</div>
+				</div>
+				<div class="row">
+					<p class="m-0 progress_title">3</p>
+					<div class="progress">
+						<span>2</span>
+					</div>
+				</div>
+				<div class="row">
+					<p class="m-0 progress_title">4</p>
+					<div class="progress">
+						<span>0</span>
+					</div>
+				</div>
+				<div class="row">
+					<p class="m-0 progress_title">5</p>
+					<div class="progress">
+						<span>0</span>
+					</div>
+				</div>
+				<div class="row">
+					<p class="m-0 progress_title">6</p>
+					<div class="progress">
+						<span>0</span>
+					</div>
+				</div>
+				<div class="row">
+					<p class="m-0 progress_title">💀</p>
+					<div class="progress">
+						<span>0</span>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-top: 48px;">
+				<div>
+					<p class="center m-0">Próxima palavra em</p>
+					<p id="timer" class="center">00:00:00</p>
+				</div>
 			</div>
 		</div>
 	</div>

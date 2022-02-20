@@ -15,6 +15,7 @@
 	--right: #43A047;
 	--near: #ea9a3e;
 	--wrong: #17191c;
+	--bar-color: #38F;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
@@ -31,6 +32,9 @@ body
 *
 {
 	user-select: none;
+	font-family: 'Rubik', sans-serif;
+	font-weight: 600;
+	color: #FFF;
 }
 
 .holder
@@ -42,6 +46,16 @@ body
 	height: 100vh;
 }
 
+.center
+{
+	text-align: center;
+}
+
+.m-0
+{
+	margin: 0;
+}
+
 /*Header*/
 
 #title
@@ -50,9 +64,78 @@ body
 	font-weight: 600;
 	color: #FFF;
 	font-size: 36px;
+	margin: 0;
+}
+
+header
+{
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items:  center;
+}
+
+header button
+{
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+}
+
+header button:active
+{
+	border: none;
+	padding: 0;
+}
+
+header button span
+{
+	color: #65717b;
 }
 
 /*Board*/
+
+@keyframes add_letter
+{
+	0% {transform: scale(1)}
+	50% {transform: scale(1.05)}
+	100% {transform: scale(1)}
+}
+
+@keyframes rm_letter
+{
+	0% {transform: scale(1)}
+	50% {transform: scale(0.95)}
+	100% {transform: scale(1)}
+}
+
+@keyframes shake
+{
+	0% {transform: translate(0, 0);}
+	25% {transform: translate(5px, 0);}
+	50% {transform: translate(0, 0);}
+	75% {transform: translate(-5px, 0);}
+	100% {transform: translate(0, 0);}
+}
+
+@keyframes reveal_letter
+{
+	0%       {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: solid; width: 70px; height: 70px; background-color: transparent;}
+	49.9999% {-webkit-transform: perspective(300px) rotateY(90deg);  border-style: solid; width: 70px; height: 70px; background-color: transparent;}
+	50%      {-webkit-transform: perspective(300px) rotateY(-90deg); border-style: none;  width: 80px; height: 80px; background-color: var(--color);}
+	100%     {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: none;  width: 80px; height: 80px; background-color: var(--color);}
+}
+
+@keyframes reveal_key
+{
+	0% {background-color: var(--letter-space-border-color); color: #FFF}
+}
+
+@keyframes reveal_key_from_near
+{
+	0% {background-color: var(--near); color: #FFF}
+}
 
 #board
 {
@@ -75,6 +158,8 @@ body
 	width: 80px;
 	height: 80px;
 	background-color: var(--letter-space-border-color);
+	border-width: 5px;
+	border-color: var(--letter-space-border-color);
 	border-radius: 10px;
 	font-family: 'Rubik', sans-serif;
 	font-weight: 600;
@@ -106,22 +191,25 @@ body
 
 .right
 {
-	background-color: var(--right) !important;
+	background-color: var(--right);
+	--color: var(--right);
 }
 
 .near
 {
-	background-color: var(--near) !important;
+	background-color: var(--near);
+	--color: var(--near);
 }
 
 .wrong
 {
-	background-color: var(--wrong) !important;
+	background-color: var(--wrong);
+	--color: var(--wrong);
 }
 
 kbd.wrong
 {
-	color: #AAA !important;
+	color: #AAA;
 }
 
 /*Keyboard*/
@@ -133,7 +221,7 @@ kbd.wrong
 	gap: 5px;
 }
 
-#keyboard kbd
+kbd
 {
 	width: 50px;
 	height: 64px;
@@ -149,7 +237,7 @@ kbd.wrong
 	cursor: pointer;
 }
 
-#keyboard kbd span
+kbd span
 {
 	font-size: inherit;
 }
@@ -179,4 +267,87 @@ kbd.wrong
 #keyboard .row:nth-child(3)
 {
 	margin-left: 40px;
+}
+
+/* Modal */
+
+.modal {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+	background-color: var(--letter-space-border-color);
+	width: 100%;
+	max-width: 600px;
+	padding: 48px;
+	border-radius: 10px;
+	border: 1px solid #65717b;
+}
+
+.progress_title
+{
+	width: 25px;
+	height: 25px;
+	padding: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.progress
+{
+	padding: 5px 0;
+	width: 100%;
+	min-width: 25px;
+	background-color: var(--bar-color);
+	display: flex;
+	justify-content: right;
+	align-items: center;
+}
+
+.progress span
+{
+	width: 25px;
+	text-align: center;
+}
+
+.stats .distribution .row
+{
+	gap: 0;
+	align-items: center;
+}
+
+#timer
+{
+	font-size: 36px;
+	margin: 0;
+}
+
+.stats .overview
+{
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 48px;
+}
+
+.stats .overview div
+{
+	width: 25%;
+	text-align: center;
+}
+
+.stats .overview div .value
+{
+	font-size: 36px;
 }

@@ -1,8 +1,25 @@
 Game = function()
 {
 	this.target = null
+	this.start_date = new Date('2022-02-18 00:00:00')
+	this.db = null
 
-	this.db
+	this.stats =
+	{
+		games:
+		{
+			0: 0,
+			1: 0,
+			2: 0,
+			3: 0,
+			4: 0,
+			5: 0,
+			6: 0
+		},
+		sequence: 0,
+		best_sequence: 0
+	}
+
 	let config = {
 		locateFile: () => "cssjs/sql-wasm.wasm",
 	};
@@ -15,10 +32,10 @@ Game = function()
 			const uInt8Array = new Uint8Array(xhr.response)
 			this.db = new SQL.Database(uInt8Array)
 			
-			diff_days = Math.floor((new Date()-new Date('2022-02-18')) / (1000 * 60 * 60 * 24))
+			diff_days = Math.floor((new Date()-this.start_date) / (1000 * 60 * 60 * 24))
 			let length = this.db.exec('SELECT COUNT(*) FROM words_list')[0].values[0][0]
 			this.target = this.db.exec('SELECT word FROM words_list LIMIT 1 OFFSET $id', {$id: diff_days%length})[0].values[0][0]
-			console.info('Loaded')
+			console.info('By Allan Jales')
 		};
 		xhr.send();
 	});
@@ -27,13 +44,13 @@ Game = function()
 	{
 		if (event.keyCode >= 65 && event.keyCode <= 90)
 			this.add_letter(String.fromCharCode(event.which))
-		else if (event.code == "Enter" || event.code == "NumpadEnter")
+		else if (event.keyCode == 13)	//Enter
 			this.enter()
-		else if (event.code == "Backspace")
+		else if (event.keyCode == 8)	//Backspace
 			this.backspace()
-		else if (event.code == "Space")
+		else if (event.keyCode == 32)	//Space
 			this.space()
-		else if (event.key == "ç")
+		else if (event.keyCode == 186)	//ç
 			this.add_letter("c")
 	}
 
@@ -43,7 +60,11 @@ Game = function()
 		if (edit_letter)
 		{
 			//Add letter
-			edit_letter.innerText = letter;
+			edit_letter.innerText = letter
+
+			edit_letter.style.animation = null
+			edit_letter.offsetHeight
+			edit_letter.style.animation = "add_letter 0.15s ease-in-out"
 
 			//Find next blank spot
 			let spaces = document.querySelectorAll(".edit_letter~.letter_space")
@@ -78,13 +99,13 @@ Game = function()
 			next_edit.classList.add("edit_letter")
 	}
 
-	this.switch_row = function()
+	this.switch_row = function(next = true)
 	{
 		let edit_row = document.querySelector(".edit_row")
 		if (edit_row)
 		{
 			let next_edit = document.querySelector(".edit_row+.row")
-			if (next_edit)
+			if (next_edit && next)
 				next_edit.classList.add("edit_row")
 			edit_row.classList.remove("edit_row")
 		}
@@ -132,11 +153,16 @@ Game = function()
 
 	this.enter = function()
 	{
+		//Target word not loaded
 		if (this.target === null)
 			return
 
-		//All letters ok
+		//There is any editing row
 		let spaces = document.querySelectorAll(".edit_row>.letter_space")
+		if (!spaces.length)
+			return
+
+		//All letters ok
 		let word = ""
 		for (const space of spaces)
 		{
@@ -148,16 +174,22 @@ Game = function()
 		//Get if word exists
 		let result = this.db.exec('SELECT word FROM words_list WHERE normalized_word=$word', {$word: word.toLowerCase()})
 		if (result.length == 0)
+		{
+			let row = document.querySelector(".edit_row")
+			row.style.animation = null
+			row.offsetHeight
+			row.style.animation = "shake 0.25s ease-in-out"
 			return
+		}
+
+		let anim_duration = .5
+		for (let key of spaces.keys())
+			spaces[key].style.animation = "reveal_letter "+anim_duration+"s linear "+anim_duration*key/3+"s both"
 
 		//Add accents and unormalize word
 		result = result[0].values[0][0]
 		for (let i = 0; i < result.length; i++)
-		{
 			spaces[i].innerText = result[i]
-		}
-
-		switch_row()
 
 		//Mark letters on keyboard
 		for (let key of spaces.keys())
@@ -169,53 +201,112 @@ Game = function()
 			for (let kbd of kbds)
 				if (kbd.innerText == spaces[key].innerText)
 				{
+					let anim_name = "reveal_key"
 					if (kbd.classList.remove("wrong"))
 						continue
 					if (kbd.classList.contains("right"))
 						continue
 					if (kbd.classList.contains("near"))
+					{
+						anim_name = "reveal_key_from_near"
 						kbd.classList.remove("near")
+					}
 					kbd.classList.add(result)
+					kbd.style.animation = anim_name + " .25s ease-in "+anim_duration*7/3+"s both"
 					continue
 				}
 		}
-		this.switch_edit(document.querySelector(".edit_row>.letter_space"))
+
+		//If has won
+		if (this.target == word.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())
+		{
+			this.finish()
+			return
+		}
+
+		switch_row()
+
+		const next_edit = document.querySelector(".edit_row>.letter_space")
+		if (next_edit)
+			this.switch_edit(next_edit)
+		else
+			this.finish()
 	}
 
 	this.backspace = function()
 	{
+		//There is any editing row
 		let spaces = document.querySelectorAll(".edit_row>.letter_space")
-		let found = false
-		for (let key of spaces.keys())
-			if (spaces[key].classList.contains("edit_letter"))
+		if (!spaces.length)
+			return
+
+		//Cursor is in postion
+		let cursor_pos = false
+		for (let i of spaces.keys())
+			if (spaces[i].classList.contains("edit_letter"))
 			{
-				found = key
+				cursor_pos = i
 				break
 			}
 
-		if (found && spaces[found].innerText)
+		//Remove self
+		if (cursor_pos !== false && spaces[cursor_pos].innerText)
 		{
-			spaces[found].innerText = ""
+			spaces[cursor_pos].innerText = ""
+			spaces[cursor_pos].style.animation = null
+			spaces[cursor_pos].offsetHeight
+			spaces[cursor_pos].style.animation = "rm_letter 0.15s ease-in-out"
 			return
 		}
 
-		if (found > 0)
+		//Remove before
+		if (cursor_pos > 0)
 		{
-			spaces[found-1].innerText = ""
-			this.switch_edit(spaces[found-1])
+			spaces[cursor_pos-1].innerText = ""
+			spaces[cursor_pos-1].style.animation = null
+			spaces[cursor_pos-1].offsetHeight
+			spaces[cursor_pos-1].style.animation = "rm_letter 0.15s ease-in-out"
+			this.switch_edit(spaces[cursor_pos-1])
 			return
 		}
 
-		if (found === 0)
-			spaces[found].innerText = ""
-
-		if (found !== 0)
+		//No cursor removes at the end
+		if (cursor_pos !== 0)
 		{
 			let last_space = spaces[spaces.length - 1]
 			last_space.innerText = ""
+			last_space.style.animation = null
+			last_space.offsetHeight
+			last_space.style.animation = "rm_letter 0.15s ease-in-out"
 			this.switch_edit(last_space)
 			return
 		}
+	}
+
+	this.finish = function()
+	{
+		//Get current row
+		let current_row = 6
+		const rows = document.querySelectorAll("#board>.row")
+		for (let i of rows.keys())
+			if (rows[i].classList.contains("edit_row"))
+			{
+				current_row = i
+				break
+			}
+
+		//Update stats
+		this.stats.games[current_row]++
+		if (current_row == 6)
+			this.stats.sequence = 0
+		else
+			this.stats.sequence++
+		if (this.stats.sequence > this.stats.best_sequence)
+			this.stats.best_sequence = this.stats.sequence
+
+		//Opens stats and remove cursor
+		setTimeout(this.open_stats, 2000);
+		switch_row(false)
 	}
 
 	//Physical keyboard
@@ -235,5 +326,63 @@ Game = function()
 		key.addEventListener("click", (e) => this.add_letter(e.target.innerText), false);
 	document.querySelector("#kbd_enter").addEventListener("click", (e) => this.enter(), false);
 	document.querySelector("#kbd_backspace").addEventListener("click", (e) => this.backspace(), false);
+
+	//Header buttons
+	this.update_stats = function()
+	{
+		const bars = document.querySelectorAll(".stats .progress")
+		let games = Object.values(this.stats.games).reduce((partialSum, a) => partialSum + a, 0);
+		let max = Math.max.apply(null, Object.values(this.stats.games))
+
+		//Set progresses
+		document.querySelector("#games").innerText = games
+		document.querySelector("#victory_rate").innerText = "0%"
+		if (max != 0)
+			document.querySelector("#victory_rate").innerText = Math.round((1-this.stats.games[6]/games)*100)+"%"
+		document.querySelector("#victory_sequence").innerText = this.stats.sequence
+		document.querySelector("#best_victory_sequence").innerText = this.stats.best_sequence
+
+		//Set values on bars
+		for (let i of bars.keys())
+			bars[i].querySelector("span").innerText = this.stats.games[i]
+
+		//Set bars width
+		for (let i of bars.keys())
+			if (this.stats.games[i] == 0)
+			{
+				bars[i].style.width = "0%"
+				bars[i].style.backgroundColor = "var(--background-color)"
+			}
+			else
+			{
+				bars[i].style.width = this.stats.games[i]/max*100+"%"
+				bars[i].style.backgroundColor = ""
+			}
+	}
+
+	this.update_timer = function()
+	{
+		let tomorrow = new Date()
+		tomorrow.setDate(tomorrow.getDate()+1);
+		tomorrow.setHours(0)
+		tomorrow.setMinutes(0)
+		tomorrow.setSeconds(0)
+		let delta_time = tomorrow-new Date()
+		
+		document.querySelector("#timer").innerText = Math.floor(delta_time/1000/3600).toString().padStart(2, '0')+':'+
+		Math.floor(delta_time/1000/60%60).toString().padStart(2, '0')+':'+Math.floor(delta_time/1000 - Math.floor(delta_time/1000/60)*60).toString().padStart(2, '0')
+	}
+
+	this.open_stats = function()
+	{
+		update_stats()
+		document.querySelector(".modal").style.display = "flex"
+	}
+
+	document.querySelector(".modal").addEventListener("click", function(){
+		document.querySelector(".modal").style.display = "none"
+		}, false);
+	document.querySelector("#stats").addEventListener("click", this.open_stats, false);
+	setInterval(update_timer, 1000);
 }
 Game()
