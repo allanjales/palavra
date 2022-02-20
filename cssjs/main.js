@@ -109,12 +109,13 @@ Game = function()
 				next_edit.classList.add("edit_row")
 			edit_row.classList.remove("edit_row")
 		}
+		this.save_cookie()
 	}
 
 	this.check_word = function(letter, position)
 	{
 		let word = this.target.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase()
-		if (letter == word[position])
+		if (letter.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase() == word[position])
 			return "right"
 		if (word.includes(letter))
 			return "near"
@@ -218,7 +219,7 @@ Game = function()
 		}
 
 		//If has won
-		if (this.target == word.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())
+		if (this.target.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() == word.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())
 		{
 			this.finish()
 			return
@@ -326,6 +327,98 @@ Game = function()
 		key.addEventListener("click", (e) => this.add_letter(e.target.innerText), false);
 	document.querySelector("#kbd_enter").addEventListener("click", (e) => this.enter(), false);
 	document.querySelector("#kbd_backspace").addEventListener("click", (e) => this.backspace(), false);
+
+	this.save_cookie = function()
+	{
+		//Save stats
+		const expires = new Date()
+		expires.setFullYear(expires.getFullYear() + 10)
+		document.cookie = encodeURI("stats="+JSON.stringify(this.stats)+";expires="+expires.toUTCString()+";path/")
+		console.info("Saved")
+
+		//Save current game
+		let tomorrow = new Date()
+		tomorrow.setDate(tomorrow.getDate()+1);
+		tomorrow.setHours(0)
+		tomorrow.setMinutes(0)
+		tomorrow.setSeconds(0)
+
+		//Set empty game setting
+		const game =
+		{
+			rows: [],
+			checks: [],
+			current_row: null
+		}
+
+		//Save word and check results
+		const rows = document.querySelectorAll("#board > .row")
+		for (i of rows.keys())
+		{
+			if (rows[i].classList.contains("edit_row"))
+			{
+				game.current_row = i
+				break
+			}
+
+			const spaces = rows[i].querySelectorAll(".letter_space")
+			if (spaces[0].innerText === "")
+				break
+
+			let word = ""
+			let checks = []
+			for (const space of spaces)
+			{
+				word += space.innerText
+				checks.push(space.classList[1])
+			}
+
+			game.rows.push(word)
+			game.checks.push(checks)
+		}
+		document.cookie = encodeURI("game="+JSON.stringify(game)+";expires="+tomorrow.toUTCString()+";path/")
+	}
+
+	this.load_cookie = function()
+	{
+		console.log('AAAA')
+		//Load stats
+		let stats = decodeURIComponent(document.cookie).match(/(^|;)\s*stats\s*=\s*([^;]+)/)?.pop() || ''
+		if (stats)
+			this.stats = JSON.parse(stats)
+
+		//Load current game
+		let game = decodeURIComponent(document.cookie).match(/(^|;)\s*game\s*=\s*([^;]+)/)?.pop() || ''
+		if (game)
+		{
+			game = JSON.parse(game)
+
+			//Set current edit row
+			document.querySelector(".edit_row").classList.remove("edit_row")
+			if (game.current_row)
+				document.querySelectorAll("#board > .row")[game.current_row].classList.add("edit_row")
+
+			//Set first edit letter
+			next_edit = document.querySelector(".edit_row>.letter_space")
+			this.switch_edit(next_edit)
+
+			//Load typed words
+			const rows = document.querySelectorAll("#board > .row");
+			for (i of rows.keys())
+			{
+				if (!game.rows[i])
+					break
+
+				const spaces = rows[i].querySelectorAll(".letter_space")
+				for (const j of spaces.keys())
+				{
+					spaces[j].innerText = game.rows[i][j]
+					spaces[j].classList.add(game.checks[i][j])
+				}
+			}
+		}
+	}
+	this.load_cookie()
 
 	//Header buttons
 	this.update_stats = function()
