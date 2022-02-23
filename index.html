@@ -5,8 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Allan</title>
 <meta name="author" content="Allan Jales https://github.com/allanjales/">
-<link rel="stylesheet" href="cssjs/style.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cssjs/style.css">
 <script src="cssjs/sql-wasm.js"></script>
 </head>
 
@@ -14,11 +17,11 @@
 	<div class="holder">
 		<header>
 			<button>
-				<span id="help" class="material-icons-outlined">help_center</span>
+				<span id="help-button" class="material-icons-outlined">help_center</span>
 			</button>
 			<h1 id="title">ALLAN</h1>
 			<button>
-				<span id="stats" class="material-icons-outlined">assessment</span>
+				<span id="stats-button" class="material-icons-outlined">assessment</span>
 			</button>
 		</header>
 		<main>
@@ -106,7 +109,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal stats">
+	<div id="stats" class="modal">
 		<div class="modal-content">
 			<p class="center">Progresso</p>
 			<div class="overview row">
@@ -172,12 +175,48 @@
 					</div>
 				</div>
 			</div>
-			<div class="row" style="margin-top: 48px;">
+			<div class="row stats-footer">
 				<div>
 					<p class="center m-0">Próxima palavra em</p>
 					<p id="timer" class="center">00:00:00</p>
 				</div>
+				<button>Compartilhe <span class="material-icons-outlined">share</span></button>
 			</div>
+		</div>
+	</div>
+	<div id="help" class="modal">
+		<div class="modal-content">
+			<h2 class="center">Como jogar</h2>
+			<p>Tente descobrir a palavra do dia através das dicas</p>
+			<hr>
+			<div class="row">
+				<div class="letter-help other">T</div>
+				<div class="letter-help other">U</div>
+				<div class="letter-help right">R</div>
+				<div class="letter-help other">M</div>
+				<div class="letter-help other">A</div>
+			</div>
+			<p>A letra <span class="letter-help inline-letter-help letter-help-highlight right">R</span> está na posição correta</p>
+			<div class="row">
+				<div class="letter-help other">P</div>
+				<div class="letter-help other">A</div>
+				<div class="letter-help other">R</div>
+				<div class="letter-help other">T</div>
+				<div class="letter-help near">O</div>
+			</div>
+			<p>A letra <span class="letter-help inline-letter-help letter-help-highlight near">O</span> não está na posição correta</p>
+			<div class="row">
+				<div class="letter-help other">C</div>
+				<div class="letter-help other">A</div>
+				<div class="letter-help wrong">S</div>
+				<div class="letter-help other">A</div>
+				<div class="letter-help other">S</div>
+			</div>
+			<p>A letra <span class="letter-help inline-letter-help letter-help-highlight wrong">S</span> não faz parte da palavra</p>
+			<hr>
+			<p>Você tem 6 tentativas</p>
+			<p>Os acentos são preenchidos automaticamente</p>
+			<p>Todo dia há uma palavra nova para descobrir</p>
 		</div>
 	</div>
 </body>

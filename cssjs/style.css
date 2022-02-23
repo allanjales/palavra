@@ -18,8 +18,6 @@
 	--bar-color: #38F;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
-
 body
 {
 	margin: 0;
@@ -33,14 +31,13 @@ body
 {
 	user-select: none;
 	font-family: 'Rubik', sans-serif;
-	font-weight: 600;
 	color: #FFF;
 }
 
 .holder
 {
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 	flex-direction: column;
 	height: 100vh;
@@ -62,7 +59,6 @@ body
 {
 	font-family: 'Rubik', sans-serif;
 	font-weight: 600;
-	color: #FFF;
 	font-size: 36px;
 	margin: 0;
 }
@@ -73,6 +69,7 @@ header
 	display: flex;
 	justify-content: space-between;
 	align-items:  center;
+	margin: 10px 0;
 }
 
 header button
@@ -121,10 +118,10 @@ header button span
 
 @keyframes reveal_letter
 {
-	0%       {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: solid; width: 70px; height: 70px; background-color: transparent;}
-	49.9999% {-webkit-transform: perspective(300px) rotateY(90deg);  border-style: solid; width: 70px; height: 70px; background-color: transparent;}
-	50%      {-webkit-transform: perspective(300px) rotateY(-90deg); border-style: none;  width: 80px; height: 80px; background-color: var(--color);}
-	100%     {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: none;  width: 80px; height: 80px; background-color: var(--color);}
+	0%       {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: solid; background-color: transparent;}
+	49.9999% {-webkit-transform: perspective(300px) rotateY(90deg);  border-style: solid; background-color: transparent;}
+	50%      {-webkit-transform: perspective(300px) rotateY(-90deg); border-style: none;  background-color: var(--color);}
+	100%     {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: none;  background-color: var(--color);}
 }
 
 @keyframes reveal_key
@@ -139,8 +136,6 @@ header button span
 
 #board
 {
-	min-width: 100px;
-	min-height: 100px;
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
@@ -157,6 +152,8 @@ header button span
 {
 	width: 80px;
 	height: 80px;
+	aspect-ratio: 1 / 1;
+    box-sizing: border-box;
 	background-color: var(--letter-space-border-color);
 	border-width: 5px;
 	border-color: var(--letter-space-border-color);
@@ -164,7 +161,6 @@ header button span
 	font-family: 'Rubik', sans-serif;
 	font-weight: 600;
 	text-transform: uppercase;
-	color: #FFF;
 	font-size: 50px;
 	display: flex;
 	justify-content: center;
@@ -174,10 +170,7 @@ header button span
 
 .edit_row > .letter_space
 {
-	width: 70px;
-	height: 70px;
 	background-color: transparent;
-	border-width: 5px;
 	border-color: var(--letter-space-border-color);
 	border-style: solid;
 	border-radius: 10px;
@@ -185,7 +178,6 @@ header button span
 
 .edit_letter
 {
-	height: 60px !important;
 	border-bottom-width: 15px !important;
 }
 
@@ -205,11 +197,7 @@ header button span
 {
 	background-color: var(--wrong);
 	--color: var(--wrong);
-}
-
-kbd.wrong
-{
-	color: #AAA;
+	color: #888;
 }
 
 /*Keyboard*/
@@ -219,6 +207,7 @@ kbd.wrong
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
+	margin: 10px 0;
 }
 
 kbd
@@ -229,7 +218,6 @@ kbd
 	border-radius: 10px;
 	font-family: 'Rubik', sans-serif;
 	font-weight: 600;
-	color: #FFF;
 	font-size: 24px;
 	display: flex;
 	justify-content: center;
@@ -237,21 +225,21 @@ kbd
 	cursor: pointer;
 }
 
-kbd span
-{
-	font-size: inherit;
-}
-
 #kbd_backspace
 {
 	margin-left: 10px;
-	width: 60px !important;
+	width: 60px;
 }
 
 #kbd_enter
 {
 	margin-left: 10px;
-	width: 150px !important;
+	width: 150px;
+}
+
+kbd span
+{
+	font-size: inherit !important;
 }
 
 #keyboard .row
@@ -322,32 +310,165 @@ kbd span
 	text-align: center;
 }
 
-.stats .distribution .row
-{
-	gap: 0;
-	align-items: center;
-}
-
 #timer
 {
 	font-size: 36px;
 	margin: 0;
 }
 
-.stats .overview
+#stats .distribution .row
+{
+	gap: 0;
+	align-items: center;
+}
+
+#stats .overview
 {
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 48px;
 }
 
-.stats .overview div
+#stats .overview div
 {
 	width: 25%;
 	text-align: center;
 }
 
-.stats .overview div .value
+#stats .overview div .value
 {
 	font-size: 36px;
+}
+
+#stats .stats-footer
+{
+	display: flex;
+	justify-content: space-between;
+	margin-top: 48px;
+}
+
+#stats .stats-footer button
+{
+	background-color:  var(--bar-color);
+	border: none;
+	display: flex;
+	padding: 0 25px;
+	border-radius: 10px;
+	font-size: 18px;
+	align-items: center;
+	gap: 10px;
+	cursor: pointer;
+}
+
+.letter-help
+{
+	width: 40px;
+	height: 40px;
+    box-sizing: border-box;
+	border-radius: 5px;
+	font-family: 'Rubik', sans-serif;
+	font-weight: 600;
+	text-transform: uppercase;
+	font-size: 25px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	border-width: 3px;
+	border-color: var(--background-color);
+}
+
+.other
+{
+	background-color: transparent;
+	border-style: solid;
+}
+
+.inline-letter-help
+{
+	display: inline-flex;
+	margin: 0 5px;
+	width: 40px;
+	height: 40px;
+    box-sizing: border-box;
+}
+
+#help > p
+{
+	font-weight: 100;
+}
+
+/* Responsiveness */
+
+@media (max-width: 630px)
+{
+	.letter_space
+	{
+		width: 50px;
+		height: 50px;
+		border-width: 4px;
+		border-radius: 6px;
+		font-size: 40px;
+	}
+
+	.edit_letter
+	{
+		border-bottom-width: 10px !important;
+	}
+
+	kbd
+	{
+		width: 24px;
+		height: 50px;
+		font-size: 12px;
+		border-radius: 4px;
+	}
+
+	#kbd_backspace
+	{
+		margin-left: 4px;
+		width: 24px;
+	}
+
+	#kbd_enter
+	{
+		margin-left: 4px;
+		width: 62px;
+	}
+
+	.modal-content
+	{
+		padding: 10px;
+	}
+
+	#timer
+	{
+		font-size: 22px !important;
+	}
+
+	#stats .stats-footer button
+	{
+		font-size: 12px;
+		padding: 0 15px;
+	}
+
+	#stats .overview
+	{
+		margin-bottom: 30px;
+	}
+
+	#stats .stats-footer
+	{
+		margin-top: 30px;
+	}
+
+	#stats p, span
+	{
+    	font-size: 12px;
+	}
+
+	#stats .m-0
+	{
+		margin: 3px;
+	}
 }

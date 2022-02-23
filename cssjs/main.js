@@ -184,8 +184,8 @@ Game = function()
 		}
 
 		let anim_duration = .5
-		for (let key of spaces.keys())
-			spaces[key].style.animation = "reveal_letter "+anim_duration+"s linear "+anim_duration*key/3+"s both"
+		for (let i of spaces.keys())
+			spaces[i].style.animation = "reveal_letter "+anim_duration+"s linear "+anim_duration*i/3+"s both"
 
 		//Add accents and unormalize word
 		result = result[0].values[0][0]
@@ -193,14 +193,14 @@ Game = function()
 			spaces[i].innerText = result[i]
 
 		//Mark letters on keyboard
-		for (let key of spaces.keys())
+		for (let i of spaces.keys())
 		{
-			let result = this.check_word(spaces[key].innerText, key)
-			spaces[key].classList.add(result)
+			let result = this.check_word(spaces[i].innerText, i)
+			spaces[i].classList.add(result)
 
 			let kbds = document.querySelectorAll("kbd.letter")
 			for (let kbd of kbds)
-				if (kbd.innerText == spaces[key].innerText)
+				if (kbd.innerText == spaces[i].innerText)
 				{
 					let anim_name = "reveal_key"
 					if (kbd.classList.remove("wrong"))
@@ -333,7 +333,7 @@ Game = function()
 		//Save stats
 		const expires = new Date()
 		expires.setFullYear(expires.getFullYear() + 10)
-		document.cookie = encodeURI("stats="+JSON.stringify(this.stats)+";expires="+expires.toUTCString()+";path/")
+		document.cookie = "stats="+encodeURI(JSON.stringify(this.stats))+";expires="+expires.toUTCString()+";path/;"
 		console.info("Saved")
 
 		//Save current game
@@ -376,12 +376,11 @@ Game = function()
 			game.rows.push(word)
 			game.checks.push(checks)
 		}
-		document.cookie = encodeURI("game="+JSON.stringify(game)+";expires="+tomorrow.toUTCString()+";path/")
+		document.cookie = "game="+encodeURI(JSON.stringify(game))+";expires="+tomorrow.toUTCString()+";path/;"
 	}
 
 	this.load_cookie = function()
 	{
-		console.log('AAAA')
 		//Load stats
 		let stats = decodeURIComponent(document.cookie).match(/(^|;)\s*stats\s*=\s*([^;]+)/)?.pop() || ''
 		if (stats)
@@ -423,7 +422,7 @@ Game = function()
 	//Header buttons
 	this.update_stats = function()
 	{
-		const bars = document.querySelectorAll(".stats .progress")
+		const bars = document.querySelectorAll("#stats .progress")
 		let games = Object.values(this.stats.games).reduce((partialSum, a) => partialSum + a, 0);
 		let max = Math.max.apply(null, Object.values(this.stats.games))
 
@@ -465,17 +464,26 @@ Game = function()
 		document.querySelector("#timer").innerText = Math.floor(delta_time/1000/3600).toString().padStart(2, '0')+':'+
 		Math.floor(delta_time/1000/60%60).toString().padStart(2, '0')+':'+Math.floor(delta_time/1000 - Math.floor(delta_time/1000/60)*60).toString().padStart(2, '0')
 	}
+	setInterval(update_timer, 1000);
 
 	this.open_stats = function()
 	{
 		update_stats()
-		document.querySelector(".modal").style.display = "flex"
+		document.querySelector("#stats").style.display = "flex"
 	}
 
-	document.querySelector(".modal").addEventListener("click", function(){
-		document.querySelector(".modal").style.display = "none"
+	//Open
+	document.querySelector("#stats-button").addEventListener("click", this.open_stats, false);
+	document.querySelector("#help-button").addEventListener("click", function(){
+		document.querySelector("#help").style.display = "flex"
+	}, false);
+
+	//Close
+	document.querySelector("#stats").addEventListener("click", function(){
+		document.querySelector("#stats").style.display = "none"
 		}, false);
-	document.querySelector("#stats").addEventListener("click", this.open_stats, false);
-	setInterval(update_timer, 1000);
+	document.querySelector("#help").addEventListener("click", function(){
+		document.querySelector("#help").style.display = "none"
+		}, false);
 }
 Game()
