@@ -402,6 +402,11 @@ kbd span
 
 @media (max-width: 630px)
 {
+	#board, #board .row
+	{
+		gap: 6px;
+	}
+
 	.letter_space
 	{
 		width: 50px;
@@ -469,6 +474,6 @@ kbd span
 
 	#stats .m-0
 	{
-		margin: 3px;
+		margin: 0px;
 	}
 }
