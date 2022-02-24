@@ -421,7 +421,6 @@ Game = function()
 		const game =
 		{
 			rows: [],
-			checks: [],
 			current_row: null
 		}
 
@@ -440,15 +439,10 @@ Game = function()
 				break
 
 			let word = ""
-			let checks = []
 			for (const space of spaces)
-			{
 				word += space.innerText
-				checks.push(space.classList[1])
-			}
 
 			game.rows.push(word)
-			game.checks.push(checks)
 		}
 		document.cookie = "game="+encodeURI(JSON.stringify(game))+";expires="+tomorrow.toUTCString()+";path/;"
 	}
