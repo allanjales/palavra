@@ -4,6 +4,8 @@ Game = function()
 	this.start_date = new Date('2022-02-18 00:00:00')
 	this.db = null
 
+	document.querySelector("body .holder").style.display = "none";
+
 	this.stats =
 	{
 		games:
@@ -35,6 +37,8 @@ Game = function()
 			diff_days = Math.floor((new Date()-this.start_date) / (1000 * 60 * 60 * 24))
 			let length = this.db.exec('SELECT COUNT(*) FROM words_list')[0].values[0][0]
 			this.target = this.db.exec('SELECT word FROM words_list LIMIT 1 OFFSET $id', {$id: diff_days%length})[0].values[0][0]
+			this.update_HUD()
+			document.querySelector("body .holder").style.display = "";
 			console.info('By Allan Jales')
 		};
 		xhr.send();
@@ -112,14 +116,82 @@ Game = function()
 		this.save_cookie()
 	}
 
-	this.check_word = function(letter, position)
+	this.check_word = function(word)
 	{
-		let word = this.target.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase()
-		if (letter.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase() == word[position])
-			return "right"
-		if (word.includes(letter))
-			return "near"
-		return "wrong"
+		//Mark letters
+		let try_letters    = word.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().split('')
+		let target_letters = this.target.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().split('')
+		let check_result   = new Array(target_letters.length);
+
+		//Get rights
+		for (let i of try_letters.keys())
+			if (try_letters[i] == target_letters[i])
+			{
+				check_result[i] = "right"
+				target_letters[i] = null
+			}
+
+		//Get nears
+		for (let i of try_letters.keys())
+			if (!check_result[i] && target_letters.includes(try_letters[i]))
+			{
+				let index = target_letters.indexOf(try_letters[i])
+				target_letters[index] = null
+				check_result[i] = "near"
+			}
+
+		//Set wrongs
+		for (let i of try_letters.keys())
+			if (!check_result[i])
+				check_result[i] = "wrong"
+
+		return check_result
+	}
+
+	this.update_HUD = function()
+	{
+		//Pass through rows
+		const rows = document.querySelectorAll("#board > .row");
+		for (i of rows.keys())
+		{
+			//Get row word
+			const spaces = rows[i].querySelectorAll(".letter_space")
+			let word = ""
+			for (const space of spaces)
+			{
+				if (space.innerText == "")
+					return
+				word += space.innerText
+			}
+
+			//Get check of word
+			let check_result = this.check_word(word)
+
+			//Show check result to user on gameboard
+			for (let j of spaces.keys())
+				spaces[j].classList.add(check_result[j])
+
+			//Show check result to user on keyboard
+			let kbds = document.querySelectorAll("kbd.letter")
+			for (let j of spaces.keys())
+				for (let kbd of kbds)
+					if (kbd.innerText == spaces[j].innerText)
+					{
+						if (kbd.classList.contains("wrong") || kbd.classList.contains("right"))
+							break
+
+						if (kbd.classList.contains("near"))
+						{
+							if (check_result[j] != "right")
+								break
+
+							kbd.classList.remove("near")
+						}
+						kbd.classList.add(check_result[j])
+						break
+					}
+		}
+
 	}
 
 	this.space = function()
@@ -187,36 +259,38 @@ Game = function()
 		for (let i of spaces.keys())
 			spaces[i].style.animation = "reveal_letter "+anim_duration+"s linear "+anim_duration*i/3+"s both"
 
-		//Add accents and unormalize word
+		//Add accents and denormalize word
 		result = result[0].values[0][0]
 		for (let i = 0; i < result.length; i++)
 			spaces[i].innerText = result[i]
 
-		//Mark letters on keyboard
+		//Show to user on gameboard
+		let check_result = this.check_word(word)
 		for (let i of spaces.keys())
-		{
-			let result = this.check_word(spaces[i].innerText, i)
-			spaces[i].classList.add(result)
+			spaces[i].classList.add(check_result[i])
 
-			let kbds = document.querySelectorAll("kbd.letter")
+		//Show to user on keyboard
+		let kbds = document.querySelectorAll("kbd.letter")
+		for (let i of spaces.keys())
 			for (let kbd of kbds)
 				if (kbd.innerText == spaces[i].innerText)
 				{
+					if (kbd.classList.contains("wrong") || kbd.classList.contains("right"))
+						break
+
 					let anim_name = "reveal_key"
-					if (kbd.classList.remove("wrong"))
-						continue
-					if (kbd.classList.contains("right"))
-						continue
 					if (kbd.classList.contains("near"))
 					{
+						if (check_result[i] != "right")
+							break
+
 						anim_name = "reveal_key_from_near"
 						kbd.classList.remove("near")
 					}
-					kbd.classList.add(result)
+					kbd.classList.add(check_result[i])
 					kbd.style.animation = anim_name + " .25s ease-in "+anim_duration*7/3+"s both"
-					continue
+					break
 				}
-		}
 
 		//If has won
 		if (this.target.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() == word.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())
@@ -405,15 +479,43 @@ Game = function()
 			const rows = document.querySelectorAll("#board > .row");
 			for (i of rows.keys())
 			{
-				if (!game.rows[i])
-					break
+				//If does not has row
+				if (!game.rows[i]) break
 
+				//Set letters on place
 				const spaces = rows[i].querySelectorAll(".letter_space")
 				for (const j of spaces.keys())
-				{
 					spaces[j].innerText = game.rows[i][j]
-					spaces[j].classList.add(game.checks[i][j])
-				}
+
+				/*
+				//Set letters check result on gameboard
+				let check_result = this.check_word(game.rows[i])
+				for (const j of spaces.keys())
+					spaces[j].classList.add(check_result[j])
+
+				//Set letters check result on keyboard
+				let kbds = document.querySelectorAll("kbd.letter")
+				for (let j of spaces.keys())
+					for (let kbd of kbds)
+						if (kbd.innerText == game.rows[i][j].innerText.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().split(''))
+						{
+							if (kbd.classList.contains("wrong") || kbd.classList.contains("right"))
+								break
+
+							let anim_name = "reveal_key"
+							if (kbd.classList.contains("near"))
+							{
+								if (check_result[i] != "right")
+									break
+
+								anim_name = "reveal_key_from_near"
+								kbd.classList.remove("near")
+							}
+							kbd.classList.add(check_result[j])
+							kbd.style.animation = anim_name + " .25s ease-in "+anim_duration*7/3+"s both"
+							break
+						}
+				*/
 			}
 		}
 	}
