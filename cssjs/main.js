@@ -581,6 +581,7 @@ Game = function()
 
 	this.share = function()
 	{
+		console.log('Sharing')
 		const rows = document.querySelectorAll("#board > .row");
 		let content = ""
 		let trys = "X"
