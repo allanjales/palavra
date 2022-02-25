@@ -584,7 +584,6 @@ Game = function()
 		const rows = document.querySelectorAll("#board > .row");
 		let content = ""
 		let trys = "X"
-		
 		word_loop: for (i of rows.keys())
 		{
 			//Get row word
@@ -624,9 +623,9 @@ Game = function()
 			if (check_result.every((val, i, arr) => val === "right"))
 				trys = i+1
 		}
-		let text = "joguei palavra! #"+this.diff_days+" "+trys+"/6\n"+content
+		let text = "joguei palavra! #"+this.diff_days+" ("+trys+"/6)\n"+content
 
-		if (!window.mobileAndTabletCheck && navigator.share)
+		if (window.mobileAndTabletCheck() && navigator.share)
 		{
 			navigator.share({
 				title: 'Palavra',
