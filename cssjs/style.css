@@ -85,6 +85,7 @@ header button
 	background-color: transparent;
 	border: none;
 	cursor: pointer;
+	touch-action: manipulation;
 	padding: 0;
 }
 
@@ -150,32 +151,28 @@ header button span
 
 #board
 {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	width: 60%;
+	width: 80%;
 	max-width: 420px;
+	display: grid;
+	gap: 5px;
+	grid-template-rows: repeat(6, 1fr);
 }
 
 #board > .row
 {
-	justify-content: center;
-}
-
-#board, #board > .row
-{
+	display: grid;
 	gap: 5px;
+	grid-template-columns: repeat(5, 1fr);
 }
 
 .letter_space
 {
-	width: 100%;
-	aspect-ratio: 1 / 1;
+	aspect-ratio: 1;
     box-sizing: border-box;
 	background-color: var(--letter-space-border-color);
 	border-width: 5px;
 	border-color: var(--letter-space-border-color);
-	border-radius: 10px;
+	border-radius: 10%;
 	font-family: 'Rubik', sans-serif;
 	font-weight: 600;
 	text-transform: uppercase;
@@ -184,6 +181,7 @@ header button span
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
+	touch-action: manipulation;
 }
 
 .edit_row > .letter_space
@@ -242,6 +240,7 @@ kbd
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
+	touch-action: manipulation;
 }
 
 #keyboard kbd > span
@@ -323,7 +322,7 @@ kbd
 {
 	display: grid;
 	gap: 5px;
-	grid-template-rows: repeat(6, 25px);
+	grid-template-rows: repeat(6, 1fr);
 	grid-template-columns: 25px 1fr;
 }
 
@@ -340,6 +339,7 @@ kbd
 	padding: 5px 0;
 	width: 100%;
 	min-width: 25px;
+	box-sizing: border-box;
 	background-color: var(--bar-color);
 	display: flex;
 	justify-content: right;
@@ -377,12 +377,13 @@ kbd
 	align-items: center;
 	gap: 10px;
 	cursor: pointer;
+	touch-action: manipulation;
 }
 
 .letter-help
 {
 	width: 40px;
-	aspect-ratio: 1 / 1;
+	aspect-ratio: 1;
     box-sizing: border-box;
 	border-radius: 5px;
 	font-family: 'Rubik', sans-serif;
@@ -393,6 +394,7 @@ kbd
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
+	touch-action: manipulation;
 	border-width: 3px;
 	border-color: var(--background-color);
 }
@@ -426,27 +428,25 @@ kbd
 		font-size: 24px;
 	}
 
-	#board, #board .row
+	#board, #board > .row
 	{
-		gap: 3px;
+		gap: 0.9vw;
 	}
 
 	.letter_space
 	{
-		width: 45px;
-		border-width: 3px;
-		border-radius: 5px;
-		font-size: 2em;
+		border-width: 0.9vw;
+		font-size: 8vw;
 	}
 
 	.edit_letter
 	{
-		border-bottom-width: 10px !important;
+		border-bottom-width: 2.5vw !important;
 	}
 
 	#keyboard > kbd
 	{
-		font-size: 1em;
+		font-size: 4vw;
 		border-radius: 4px;
 	}
 
