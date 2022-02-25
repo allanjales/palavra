@@ -44,6 +44,8 @@ html, body, .holder
 	width: 100%;
 	max-width: 595px;
 	padding: 5px;
+	gap: 5px;
+	box-sizing: border-box;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -66,7 +68,7 @@ html, body, .holder
 {
 	font-family: 'Rubik', sans-serif;
 	font-weight: 600;
-	font-size: 36px;
+	font-size: 2em;
 	margin: 0;
 }
 
@@ -75,8 +77,7 @@ header
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
-	align-items:  center;
-	margin: 10px 0;
+	align-items: center;
 }
 
 header button
@@ -141,24 +142,34 @@ header button span
 	0% {background-color: var(--near); color: #FFF}
 }
 
-#board
-{
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
-
 .row
 {
 	display: flex;
 	flex-direction: row;
-	gap: 10px;
+}
+
+#board
+{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 60%;
+	max-width: 420px;
+}
+
+#board > .row
+{
+	justify-content: center;
+}
+
+#board, #board > .row
+{
+	gap: 5px;
 }
 
 .letter_space
 {
-	width: 80px;
-	height: 80px;
+	width: 100%;
 	aspect-ratio: 1 / 1;
     box-sizing: border-box;
 	background-color: var(--letter-space-border-color);
@@ -168,7 +179,7 @@ header button span
 	font-family: 'Rubik', sans-serif;
 	font-weight: 600;
 	text-transform: uppercase;
-	font-size: 50px;
+	font-size: 3em;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -180,7 +191,6 @@ header button span
 	background-color: transparent;
 	border-color: var(--letter-space-border-color);
 	border-style: solid;
-	border-radius: 10px;
 }
 
 .edit_letter
@@ -212,7 +222,7 @@ header button span
 #keyboard
 {
 	width: 100%;
-	margin: 10px 5px;
+	height: 25%;
 	display: grid;
 	gap: 5px;
 	grid-template-rows: repeat(3, 1fr);
@@ -223,16 +233,20 @@ kbd
 {
 	grid-column: span 3;
 	width: 100%;
-	height: 64px;
 	background-color: var(--letter-space-border-color);
 	border-radius: 10px;
 	font-family: 'Rubik', sans-serif;
 	font-weight: 600;
-	font-size: 24px;
+	font-size: 1.5em;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
+}
+
+#keyboard kbd > span
+{
+	font-size: inherit;
 }
 
 #keyboard > kbd:nth-child(11)
@@ -281,17 +295,47 @@ kbd
 	border: 1px solid #65717b;
 }
 
-.progress_title
+#stats .overview
 {
-	width: 25px;
-	height: 25px;
-	padding: 5px;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 48px;
+	gap:  5px;
+}
+
+#stats .overview > div
+{
+	width: 25%;
+	text-align: center;
+}
+
+#stats .overview > div > p
+{
+	margin: 0;
+}
+
+#stats .overview > div .overview_value
+{
+	font-size: 36px;
+}
+
+#stats .distribution
+{
+	display: grid;
+	gap: 5px;
+	grid-template-rows: repeat(6, 25px);
+	grid-template-columns: 25px 1fr;
+}
+
+#stats .distribution .progress_title
+{
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	margin: 0;
 }
 
-.progress
+#stats .distribution .progress
 {
 	padding: 5px 0;
 	width: 100%;
@@ -300,9 +344,10 @@ kbd
 	display: flex;
 	justify-content: right;
 	align-items: center;
+	border-radius: 4px;
 }
 
-.progress span
+#stats .distribution .progress > span
 {
 	width: 25px;
 	text-align: center;
@@ -312,30 +357,6 @@ kbd
 {
 	font-size: 36px;
 	margin: 0;
-}
-
-#stats .distribution .row
-{
-	gap: 0;
-	align-items: center;
-}
-
-#stats .overview
-{
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 48px;
-}
-
-#stats .overview div
-{
-	width: 25%;
-	text-align: center;
-}
-
-#stats .overview div .value
-{
-	font-size: 36px;
 }
 
 #stats .stats-footer
@@ -361,7 +382,7 @@ kbd
 .letter-help
 {
 	width: 40px;
-	height: 40px;
+	aspect-ratio: 1 / 1;
     box-sizing: border-box;
 	border-radius: 5px;
 	font-family: 'Rubik', sans-serif;
@@ -400,18 +421,22 @@ kbd
 
 @media (max-width: 630px)
 {
+	#title
+	{
+		font-size: 24px;
+	}
+
 	#board, #board .row
 	{
-		gap: 6px;
+		gap: 3px;
 	}
 
 	.letter_space
 	{
-		width: 50px;
-		height: 50px;
-		border-width: 4px;
-		border-radius: 6px;
-		font-size: 32px;
+		width: 45px;
+		border-width: 3px;
+		border-radius: 5px;
+		font-size: 2em;
 	}
 
 	.edit_letter
@@ -421,14 +446,23 @@ kbd
 
 	#keyboard > kbd
 	{
-		height: 50px;
-		font-size: 12px;
+		font-size: 1em;
 		border-radius: 4px;
 	}
 
 	.modal-content
 	{
 		padding: 10px;
+	}
+
+	#stats .overview > div .overview_value
+	{
+		font-size: 24px;
+	}
+
+	#stats .overview
+	{
+		margin-bottom: 30px;
 	}
 
 	#timer
@@ -442,14 +476,14 @@ kbd
 		padding: 0 15px;
 	}
 
-	#stats .overview
-	{
-		margin-bottom: 30px;
-	}
-
 	#stats .stats-footer
 	{
 		margin-top: 30px;
+	}
+
+	#stats .distribution
+	{
+		gap: 3px;
 	}
 
 	#stats p, span

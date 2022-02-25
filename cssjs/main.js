@@ -466,7 +466,7 @@ Game = function()
 				document.querySelectorAll("#board > .row")[game.current_row].classList.add("edit_row")
 
 			//Set first edit letter
-			next_edit = document.querySelector(".edit_row>.letter_space")
+			const next_edit = document.querySelector(".edit_row>.letter_space")
 			this.switch_edit(next_edit)
 
 			//Load typed words
@@ -481,9 +481,12 @@ Game = function()
 				for (const j of spaces.keys())
 					spaces[j].innerText = game.rows[i][j]
 			}
+
+			//If has finnished
+			if (!next_edit)
+				this.open_stats()
 		}
 	}
-	this.load_cookie()
 
 	//Header buttons
 	this.update_stats = function()
@@ -551,5 +554,22 @@ Game = function()
 	document.querySelector("#help").addEventListener("click", function(){
 		document.querySelector("#help").style.display = "none"
 		}, false);
+
+	this.share = function()
+	{
+		if (navigator.share) {
+			navigator.share({
+				title: 'Palavra',
+				text: 'Hey, joguei Palavra!',
+				url: 'https://allanjales.github.io/palavra',
+			})
+			.then(() => console.log('Successful share'))
+			.catch((error) => console.log('Error sharing', error));
+		}
+	}
+
+	document.querySelector("#share_button").addEventListener("click", this.share, false);
+
+	this.load_cookie()
 }
 Game()
