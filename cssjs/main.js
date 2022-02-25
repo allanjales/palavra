@@ -581,6 +581,10 @@ Game = function()
 
 	this.share = function()
 	{
+		document.querySelectorAll("#help p")[0].innerText = window.mobileCheck()
+		document.querySelectorAll("#help p")[1].innerText = window.mobileAndTabletCheck()
+		document.querySelectorAll("#help p")[2].innerText = navigator.share
+
 		const rows = document.querySelectorAll("#board > .row");
 		let content = ""
 		let trys = "X"
@@ -624,14 +628,6 @@ Game = function()
 				trys = i
 		}
 		let text = "joguei palavra! #"+this.diff_days+" ("+trys+"/6)\n"+content
-
-		alert(window.mobileCheck())
-		alert(window.mobileAndTabletCheck())
-		alert(navigator.share)
-
-		document.querySelectorAll("#help p")[0].innerText = window.mobileCheck()
-		document.querySelectorAll("#help p")[1].innerText = window.mobileAndTabletCheck()
-		document.querySelectorAll("#help p")[2].innerText = navigator.share
 
 		if (window.mobileCheck() && navigator.share)
 		{
