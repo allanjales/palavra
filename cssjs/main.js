@@ -585,7 +585,9 @@ Game = function()
 		const rows = document.querySelectorAll("#board > .row");
 		let content = ""
 		let trys = "X"
-		for (i of rows.keys())
+		console.log('Sharing')
+		
+		word_loop: for (i of rows.keys())
 		{
 			//Get row word
 			const spaces = rows[i].querySelectorAll(".letter_space")
@@ -593,7 +595,7 @@ Game = function()
 			for (const space of spaces)
 			{
 				if (space.innerText == "")
-					return
+					break word_loop
 				word += space.innerText
 			}
 
@@ -624,8 +626,12 @@ Game = function()
 			if (check_result.every((val, i, arr) => val === "right"))
 				trys = i
 		}
+
+		console.log('Sharing')
 		let text = "joguei palavra! #"+this.diff_days+" ("+trys+"/6)\n"+content
 
+		console.log('Sharing')
+		console.log(window.mobileAndTabletCheck())
 		if (window.mobileAndTabletCheck())
 		{
 			navigator.share({
