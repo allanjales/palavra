@@ -172,7 +172,7 @@ Game = function()
 				spaces[j].classList.add(check_result[j])
 
 			//Show check result to user on keyboard
-			let kbds = document.querySelectorAll("kbd.letter")
+			let kbds = document.querySelectorAll("#keyboard > kbd.letter")
 			for (let j of spaces.keys())
 				for (let kbd of kbds)
 					if (kbd.innerText == spaces[j].innerText)
@@ -270,7 +270,7 @@ Game = function()
 			spaces[i].classList.add(check_result[i])
 
 		//Show to user on keyboard
-		let kbds = document.querySelectorAll("kbd.letter")
+		let kbds = document.querySelectorAll("#keyboard > kbd.letter")
 		for (let i of spaces.keys())
 			for (let kbd of kbds)
 				if (kbd.innerText == spaces[i].innerText)
@@ -396,7 +396,7 @@ Game = function()
 		}, false);
 
 	//Virtual keyboard
-	let keys = document.querySelectorAll("kbd.letter");
+	let keys = document.querySelectorAll("#keyboard > kbd.letter");
 	for (const key of keys)
 		key.addEventListener("click", (e) => this.add_letter(e.target.innerText), false);
 	document.querySelector("#kbd_enter").addEventListener("click", (e) => this.enter(), false);
@@ -480,36 +480,6 @@ Game = function()
 				const spaces = rows[i].querySelectorAll(".letter_space")
 				for (const j of spaces.keys())
 					spaces[j].innerText = game.rows[i][j]
-
-				/*
-				//Set letters check result on gameboard
-				let check_result = this.check_word(game.rows[i])
-				for (const j of spaces.keys())
-					spaces[j].classList.add(check_result[j])
-
-				//Set letters check result on keyboard
-				let kbds = document.querySelectorAll("kbd.letter")
-				for (let j of spaces.keys())
-					for (let kbd of kbds)
-						if (kbd.innerText == game.rows[i][j].innerText.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().split(''))
-						{
-							if (kbd.classList.contains("wrong") || kbd.classList.contains("right"))
-								break
-
-							let anim_name = "reveal_key"
-							if (kbd.classList.contains("near"))
-							{
-								if (check_result[i] != "right")
-									break
-
-								anim_name = "reveal_key_from_near"
-								kbd.classList.remove("near")
-							}
-							kbd.classList.add(check_result[j])
-							kbd.style.animation = anim_name + " .25s ease-in "+anim_duration*7/3+"s both"
-							break
-						}
-				*/
 			}
 		}
 	}
