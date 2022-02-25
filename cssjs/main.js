@@ -581,11 +581,9 @@ Game = function()
 
 	this.share = function()
 	{
-		console.log('Sharing')
 		const rows = document.querySelectorAll("#board > .row");
 		let content = ""
 		let trys = "X"
-		console.log('Sharing')
 		
 		word_loop: for (i of rows.keys())
 		{
@@ -624,14 +622,10 @@ Game = function()
 			}
 
 			if (check_result.every((val, i, arr) => val === "right"))
-				trys = i
+				trys = i+1
 		}
-
-		console.log('Sharing')
 		let text = "joguei palavra! #"+this.diff_days+" ("+trys+"/6)\n"+content
 
-		console.log('Sharing')
-		console.log(window.mobileAndTabletCheck())
 		if (window.mobileAndTabletCheck())
 		{
 			navigator.share({
