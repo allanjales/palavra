@@ -221,6 +221,7 @@ header button span
 {
 	width: 100%;
 	height: 25%;
+	max-height: 250px;
 	display: grid;
 	gap: 5px;
 	grid-template-rows: repeat(3, 1fr);
@@ -442,6 +443,12 @@ kbd
 	.edit_letter
 	{
 		border-bottom-width: 2.5vw !important;
+	}
+
+	#keyboard
+	{
+		height: auto;
+		aspect-ratio: 16 / 9;
 	}
 
 	#keyboard > kbd
