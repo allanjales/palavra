@@ -625,7 +625,7 @@ Game = function()
 		}
 		let text = "joguei palavra! #"+this.diff_days+" "+trys+"/6\n"+content
 
-		if (!window.mobileAndTabletCheck && navigator.share)
+		if (window.mobileAndTabletCheck() && navigator.share)
 		{
 			navigator.share({
 				title: 'Palavra',
