@@ -398,6 +398,7 @@ kbd
 	display: flex;
 	justify-content: space-between;
 	margin-top: 48px;
+	margin-bottom: 12px;
 }
 
 #stats .stats-footer button
@@ -443,14 +444,16 @@ kbd
 {
 	display: inline-flex;
 	margin: 0 5px;
-	width: 40px;
-	height: 40px;
-    box-sizing: border-box;
 }
 
-#help > p
+#help p
 {
 	font-weight: 100;
+}
+
+#help hr
+{
+	border-color: var(--letter-space-border-color);
 }
 
 /* Responsiveness */
@@ -486,7 +489,7 @@ kbd
 
 	.modal-content
 	{
-		padding: 15px 10px;
+		padding: 10px;
 	}
 
 	#stats .overview > div .overview_value
@@ -520,13 +523,14 @@ kbd
 		gap: 3px;
 	}
 
-	#stats p, span
+	#stats p, span, #help p
 	{
 		font-size: 12px;
 	}
 
-	#stats .m-0
+	.letter-help
 	{
-		margin: 0px;
+		width: 30px;
+		font-size: 16px;
 	}
 }

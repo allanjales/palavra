@@ -47,9 +47,6 @@ Game = function()
 
 	this.KeyDown = function(event)
 	{
-		if (!this.is_finished())
-			this.hide_notification()
-
 		if (event.keyCode >= 65 && event.keyCode <= 90)
 			this.add_letter(String.fromCharCode(event.which))
 		else if (event.keyCode == 13)	//Enter
@@ -64,6 +61,9 @@ Game = function()
 
 	this.add_letter = function(letter)
 	{
+		if (!this.is_finished())
+			this.hide_notification()
+
 		let edit_letter = document.querySelector(".edit_letter")
 		if (edit_letter)
 		{
@@ -117,7 +117,7 @@ Game = function()
 				next_edit.classList.add("edit_row")
 			edit_row.classList.remove("edit_row")
 		}
-		//this.save_cookie()
+		this.save_cookie()
 	}
 
 	this.check_word = function(word)
@@ -161,6 +161,7 @@ Game = function()
 		{
 			//Get row word
 			const spaces = rows[i].querySelectorAll(".letter_space")
+			word = ""
 			for (const space of spaces)
 			{
 				if (space.innerText == "")
@@ -208,6 +209,9 @@ Game = function()
 
 	this.space = function()
 	{
+		if (!this.is_finished())
+			this.hide_notification()
+
 		//Find next blank spot
 		let spaces = document.querySelectorAll(".edit_letter~.letter_space")
 		for (const space of spaces)
@@ -238,6 +242,9 @@ Game = function()
 
 	this.enter = function()
 	{
+		if (!this.is_finished())
+			this.hide_notification()
+
 		//Target word not loaded
 		if (this.target === null)
 			return
@@ -334,6 +341,9 @@ Game = function()
 
 	this.backspace = function()
 	{
+		if (!this.is_finished())
+			this.hide_notification()
+		
 		//There is any editing row
 		let spaces = document.querySelectorAll(".edit_row>.letter_space")
 		if (!spaces.length)
@@ -657,22 +667,21 @@ Game = function()
 			if (check_result.every((val, i, arr) => val === "right"))
 				trys = i+1
 		}
-		let text = "joguei palavra! #"+this.diff_days+" ("+trys+"/6)\n"+content
+		let text = "joguei Palavra! #"+this.diff_days+" ("+trys+"/6)\n"+content+"\n\nallanjales.github.io/palavra"
 
 		//Sharing action
 		if (window.mobileAndTabletCheck() && navigator.share)
 		{
 			navigator.share({
 				title: 'Palavra',
-				text: text+"\n",
-				url: 'allanjales.github.io/palavra',
+				text: text
 			})
 			.then(() => this.show_notification("Compartilhamento feito", 0, 5))
 			.catch((error) => this.show_notification("Falha no compartilhamento", 0, 5))
 		}
 		else
 		{
-			navigator.clipboard.writeText(text+"\n\nallanjales.github.io/palavra")
+			navigator.clipboard.writeText(text)
 			.then(() => this.show_notification("Copiado para a área de transferência", 0, 5))
 			.catch((error) => this.show_notification("Não foi possível copiar para a área de transferência", 0, 5));
 		}
