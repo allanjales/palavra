@@ -47,6 +47,9 @@ Game = function()
 
 	this.KeyDown = function(event)
 	{
+		if (!this.is_finished())
+			this.hide_notification()
+
 		if (event.keyCode >= 65 && event.keyCode <= 90)
 			this.add_letter(String.fromCharCode(event.which))
 		else if (event.keyCode == 13)	//Enter
@@ -114,7 +117,7 @@ Game = function()
 				next_edit.classList.add("edit_row")
 			edit_row.classList.remove("edit_row")
 		}
-		this.save_cookie()
+		//this.save_cookie()
 	}
 
 	this.check_word = function(word)
@@ -153,11 +156,11 @@ Game = function()
 	{
 		//Pass through rows
 		const rows = document.querySelectorAll("#board > .row");
+		let word = ""
 		for (i of rows.keys())
 		{
 			//Get row word
 			const spaces = rows[i].querySelectorAll(".letter_space")
-			let word = ""
 			for (const space of spaces)
 			{
 				if (space.innerText == "")
@@ -198,6 +201,9 @@ Game = function()
 					}
 		}
 
+		//If lost
+		if (this.check_word(word))
+			this.show_notification("Palavra certa: "+this.target)
 	}
 
 	this.space = function()
@@ -258,6 +264,7 @@ Game = function()
 			row.style.animation = null
 			row.offsetHeight
 			row.style.animation = "shake 0.25s ease-in-out"
+			this.show_notification("Esta palavra não existe")
 			return
 		}
 
@@ -316,7 +323,13 @@ Game = function()
 		if (next_edit)
 			this.switch_edit(next_edit)
 		else
+		{
+			let row = document.querySelector("#board > .row:last-child")
+			row.style.animation = null
+			row.offsetHeight
+			row.style.animation = "shake 0.25s ease-in-out "+anim_duration*(5/3+1)+"s"
 			this.finish()
+		}
 	}
 
 	this.backspace = function()
@@ -390,14 +403,29 @@ Game = function()
 		if (this.stats.sequence > this.stats.best_sequence)
 			this.stats.best_sequence = this.stats.sequence
 
-		//Opens stats and remove cursor
-		setTimeout(this.open_stats, 2000);
+		//Notify
+		if (current_row < 6)
+		{
+			let phrases = ["Fantástico", "Sensacional", "Incrível", "Genial", "Parabéns", "Impressionante"]
+			if (current_row == 0)
+				phrases = ["De primeira", "Sorte?"]
+			else if (current_row == 5)
+				phrases = ["Ufa", "Essa foi por pouco", "Quase"]
+			this.show_notification(phrases[Math.floor(Math.random()*phrases.length)], .5*11/3)
+		}
+		else
+			this.show_notification("Palavra certa: "+this.target, .5*11/3)
+
+
+		//Opens stats and remove type cursor
+		setTimeout(this.open_stats, 2500);
 		switch_row(false)
 	}
 
+	//Check if game is finished or not
 	this.is_finished = function()
 	{
-		if (document.querySelector(".edit_row>.letter_space"))
+		if (document.querySelector(".edit_row"))
 			return false
 		return true
 	}
@@ -504,6 +532,9 @@ Game = function()
 			if (this.is_finished())
 				this.open_stats()
 		}
+
+		if (!game && !stats)
+			this.open_help()
 	}
 
 	//Header buttons
@@ -565,11 +596,14 @@ Game = function()
 		document.querySelector("#stats").style.display = "flex"
 	}
 
+	this.open_help = function()
+	{
+		document.querySelector("#help").style.display = "flex"
+	}
+
 	//Open
 	document.querySelector("#stats-button").addEventListener("click", this.open_stats, false);
-	document.querySelector("#help-button").addEventListener("click", function(){
-		document.querySelector("#help").style.display = "flex"
-	}, false);
+	document.querySelector("#help-button").addEventListener("click", this.open_help, false);
 
 	//Close
 	document.querySelector("#stats").addEventListener("click", function(){
@@ -625,27 +659,52 @@ Game = function()
 		}
 		let text = "joguei palavra! #"+this.diff_days+" ("+trys+"/6)\n"+content
 
+		//Sharing action
 		if (window.mobileAndTabletCheck() && navigator.share)
 		{
 			navigator.share({
 				title: 'Palavra',
-				text: text,
-				url: 'https://allanjales.github.io/palavra',
+				text: text+"\n",
+				url: 'allanjales.github.io/palavra',
 			})
-			.then(() => console.log('Successful share'))
-			.catch((error) => console.log('Error sharing', error))
+			.then(() => this.show_notification("Compartilhamento feito", 0, 5))
+			.catch((error) => this.show_notification("Falha no compartilhamento", 0, 5))
 		}
 		else
 		{
 			navigator.clipboard.writeText(text+"\n\nallanjales.github.io/palavra")
-			.then(() => console.log('Async: Copying to clipboard was successful!'))
-			.catch((error) => console.log('Async: Could not copy text: ', error));
+			.then(() => this.show_notification("Copiado para a área de transferência", 0, 5))
+			.catch((error) => this.show_notification("Não foi possível copiar para a área de transferência", 0, 5));
 		}
 	}
 
 	document.querySelector("#share_button").addEventListener("click", (e) => this.share(), false);
 
 	this.load_cookie()
+}
+
+this.show_notification = function(text, delay = 0, duration = -1)
+{
+	const notification = document.querySelector("#notification")
+	notification.innerText = text
+	notification.style.setProperty('--scale-notification', 1)
+	notification.style.animation = null
+	notification.offsetHeight
+	notification.style.animation = "show_notification 0.15s linear both "+delay+"s"
+	if (duration > 0)
+		setTimeout(this.hide_notification, (delay+duration)*1000);
+}
+
+this.hide_notification = function(delay = 0)
+{
+	const notification = document.querySelector("#notification")
+	if (getComputedStyle(notification).getPropertyValue('--scale-notification') != 0)
+	{
+		notification.style.setProperty('--scale-notification', 0)
+		notification.style.animation = null
+		notification.offsetHeight
+		notification.style.animation = "hide_notification 0.15s linear both "+delay+"s"
+	}
 }
 
 window.mobileAndTabletCheck = function() {

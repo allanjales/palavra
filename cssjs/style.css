@@ -100,6 +100,29 @@ header button span
 	color: #65717b;
 }
 
+#notification
+{
+	background-color: var(--bar-color);
+	box-sizing: border-box;
+	padding: 10px;
+	border-radius: 5px;
+	--scale-notification: 0;
+	transform: scale(var(--scale-notification));
+	z-index: 2;
+}
+
+@keyframes show_notification
+{
+	0% {transform: scale(0)}
+	100% {transform: scale(1)}
+}
+
+@keyframes hide_notification
+{
+	0% {transform: scale(1)}
+	100% {transform: scale(0)}
+}
+
 /*Board*/
 
 @keyframes add_letter
@@ -119,18 +142,18 @@ header button span
 @keyframes shake
 {
 	0% {transform: translate(0, 0);}
-	25% {transform: translate(5px, 0);}
+	25% {transform: translate(10px, 0);}
 	50% {transform: translate(0, 0);}
-	75% {transform: translate(-5px, 0);}
+	75% {transform: translate(-10px, 0);}
 	100% {transform: translate(0, 0);}
 }
 
 @keyframes reveal_letter
 {
-	0%       {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: solid; background-color: transparent;}
-	49.9999% {-webkit-transform: perspective(300px) rotateY(90deg);  border-style: solid; background-color: transparent;}
-	50%      {-webkit-transform: perspective(300px) rotateY(-90deg); border-style: none;  background-color: var(--color);}
-	100%     {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: none;  background-color: var(--color);}
+	0%       {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: solid; background-color: var(--from-color);  color: #FFF}
+	49.9999% {-webkit-transform: perspective(300px) rotateY(90deg);  border-style: solid; background-color: var(--from-color);  color: #FFF}
+	50%      {-webkit-transform: perspective(300px) rotateY(-90deg); border-style: none;  background-color: var(--to-bg-color); color: var(--to-tx-color)}
+	100%     {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: none;  background-color: var(--to-bg-color); color: var(--to-tx-color)}
 }
 
 @keyframes reveal_key
@@ -153,7 +176,10 @@ header button span
 {
 	width: 80%;
 	max-width: 420px;
-	display: grid;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	flex-grow: 1;
 	gap: 5px;
 	grid-template-rows: repeat(6, 1fr);
 }
@@ -182,6 +208,7 @@ header button span
 	align-items: center;
 	cursor: pointer;
 	touch-action: manipulation;
+	--from-color: transparent;
 }
 
 .edit_row > .letter_space
@@ -199,20 +226,25 @@ header button span
 .right
 {
 	background-color: var(--right);
-	--color: var(--right);
+	--to-bg-color: var(--right);
+	--to-tx-color: #FFF;
+	color: var(--to-tx-color);
 }
 
 .near
 {
 	background-color: var(--near);
-	--color: var(--near);
+	--to-bg-color: var(--near);
+	--to-tx-color: #FFF;
+	color: var(--to-tx-color);
 }
 
 .wrong
 {
 	background-color: var(--wrong);
-	--color: var(--wrong);
-	color: #888;
+	--to-bg-color: var(--wrong);
+	--to-tx-color: #888;
+	color: var(--to-tx-color);
 }
 
 /*Keyboard*/
@@ -231,6 +263,7 @@ kbd
 {
 	grid-column: span 3;
 	width: 100%;
+	--from-color: var(--letter-space-border-color);
 	background-color: var(--letter-space-border-color);
 	border-radius: 10px;
 	font-family: 'Rubik', sans-serif;
@@ -292,6 +325,7 @@ kbd
 	padding: 48px;
 	border-radius: 10px;
 	border: 1px solid #65717b;
+	margin: auto;
 }
 
 #stats .overview
@@ -452,7 +486,7 @@ kbd
 
 	.modal-content
 	{
-		padding: 10px;
+		padding: 15px 10px;
 	}
 
 	#stats .overview > div .overview_value
