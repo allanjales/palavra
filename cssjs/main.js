@@ -177,7 +177,7 @@ Game = function()
 				spaces[j].classList.add(check_result[j])
 
 			//Show check result to user on keyboard
-			let kbds = document.querySelectorAll("#keyboard > kbd.letter")
+			let kbds = document.querySelectorAll("#keyboard > button.letter")
 			for (let j of spaces.keys())
 				for (let kbd of kbds)
 					if (kbd.innerText == spaces[j].innerText)
@@ -271,7 +271,7 @@ Game = function()
 			row.style.animation = null
 			row.offsetHeight
 			row.style.animation = "shake 0.25s ease-in-out"
-			this.show_notification("Esta palavra não existe")
+			this.show_notification("Essa palavra não é aceita")
 			return
 		}
 
@@ -290,7 +290,7 @@ Game = function()
 			spaces[i].classList.add(check_result[i])
 
 		//Show to user on keyboard
-		let kbds = document.querySelectorAll("#keyboard > kbd.letter")
+		let kbds = document.querySelectorAll("#keyboard > button.letter")
 		for (let i of spaces.keys())
 			for (let kbd of kbds)
 				if (kbd.innerText == spaces[i].innerText)
@@ -416,7 +416,7 @@ Game = function()
 		//Notify
 		if (current_row < 6)
 		{
-			let phrases = ["Fantástico", "Sensacional", "Incrível", "Genial", "Parabéns", "Impressionante"]
+			let phrases = ["Fantástico", "Sensacional", "Incrível", "Genial", "Parabéns", "Impressionante", "Boa!", "Espetacular"]
 			if (current_row == 0)
 				phrases = ["De primeira", "Sorte?"]
 			else if (current_row == 5)
@@ -452,7 +452,7 @@ Game = function()
 		}, false);
 
 	//Virtual keyboard
-	let keys = document.querySelectorAll("#keyboard > kbd.letter");
+	let keys = document.querySelectorAll("#keyboard > button.letter");
 	for (const key of keys)
 		key.addEventListener("click", (e) => this.add_letter(e.target.innerText), false);
 	document.querySelector("#kbd_enter").addEventListener("click", (e) => this.enter(), false);
@@ -611,17 +611,21 @@ Game = function()
 		document.querySelector("#help").style.display = "flex"
 	}
 
+	this.close_modals = function(event)
+	{
+		if (event && event.target.tagName === "BUTTON")
+			return
+		document.querySelector("#help").style.display = "none"
+		document.querySelector("#stats").style.display = "none"
+	}
+
 	//Open
 	document.querySelector("#stats-button").addEventListener("click", this.open_stats, false);
 	document.querySelector("#help-button").addEventListener("click", this.open_help, false);
 
 	//Close
-	document.querySelector("#stats").addEventListener("click", function(){
-		document.querySelector("#stats").style.display = "none"
-		}, false);
-	document.querySelector("#help").addEventListener("click", function(){
-		document.querySelector("#help").style.display = "none"
-		}, false);
+	document.querySelector("#stats").addEventListener("click", (e) => this.close_modals(e), false);
+	document.querySelector("#help").addEventListener("click", (e) => this.close_modals(e), false);
 
 	this.share = function()
 	{

@@ -259,12 +259,13 @@ header button span
 	grid-template-columns: repeat(32, 1fr);
 }
 
-kbd
+#keyboard button
 {
 	grid-column: span 3;
 	width: 100%;
 	--from-color: var(--letter-space-border-color);
 	background-color: var(--letter-space-border-color);
+	border: none;
 	border-radius: 10px;
 	font-family: 'Rubik', sans-serif;
 	font-weight: 600;
@@ -276,27 +277,27 @@ kbd
 	touch-action: manipulation;
 }
 
-#keyboard kbd > span
+#keyboard button > span
 {
 	font-size: inherit;
 }
 
-#keyboard > kbd:nth-child(11)
+#keyboard > button:nth-child(11)
 {
 	grid-column: 2 / span 3;
 }
 
-#keyboard > kbd:nth-child(21)
+#keyboard > button:nth-child(21)
 {
 	grid-column: 3 / span 3;
 }
 
-#keyboard > kbd:nth-child(20)
+#keyboard > button:nth-child(20)
 {
 	grid-column: 30 / span 4;
 }
 
-#keyboard > kbd:nth-child(28)
+#keyboard > button:nth-child(28)
 {
 	grid-column: 25 / span 9;
 }
@@ -481,7 +482,7 @@ kbd
 		border-bottom-width: 2.5vw !important;
 	}
 
-	#keyboard > kbd
+	#keyboard > button
 	{
 		font-size: 4vw;
 		border-radius: 4px;
