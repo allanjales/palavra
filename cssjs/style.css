@@ -156,16 +156,6 @@ header button span
 	100%     {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: none;  background-color: var(--to-bg-color); color: var(--to-tx-color)}
 }
 
-@keyframes reveal_key
-{
-	0% {background-color: var(--letter-space-border-color); color: #FFF}
-}
-
-@keyframes reveal_key_from_near
-{
-	0% {background-color: var(--near); color: #FFF}
-}
-
 .row
 {
 	display: flex;
@@ -259,12 +249,16 @@ header button span
 	grid-template-columns: repeat(32, 1fr);
 }
 
+button
+{
+	background-color: var(--letter-space-border-color);
+}
+
 #keyboard button
 {
 	grid-column: span 3;
 	width: 100%;
 	--from-color: var(--letter-space-border-color);
-	background-color: var(--letter-space-border-color);
 	border: none;
 	border-radius: 10px;
 	font-family: 'Rubik', sans-serif;
@@ -275,6 +269,7 @@ header button span
 	align-items: center;
 	cursor: pointer;
 	touch-action: manipulation;
+	transition: background-color .5s ease-in-out 1.2s, color .25s ease-in-out 1.2s;
 }
 
 #keyboard button > span

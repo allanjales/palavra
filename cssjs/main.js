@@ -179,27 +179,26 @@ Game = function()
 			//Show check result to user on keyboard
 			let kbds = document.querySelectorAll("#keyboard > button.letter")
 			for (let j of spaces.keys())
+			{
 				for (let kbd of kbds)
-					if (kbd.innerText == spaces[j].innerText)
+					if (kbd.innerText == spaces[j].innerText.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase())
 					{
 						if (kbd.classList.contains("right"))
 							break
 
 						if (kbd.classList.contains("wrong") && check_result[j] === "wrong")
 							break
-						else
-							kbd.classList.remove("wrong")
 
 						if (kbd.classList.contains("near"))
 						{
 							if (check_result[j] != "right")
 								break
-
 							kbd.classList.remove("near")
 						}
 						kbd.classList.add(check_result[j])
 						break
 					}
+			}
 		}
 
 		//If lost
@@ -293,7 +292,7 @@ Game = function()
 		let kbds = document.querySelectorAll("#keyboard > button.letter")
 		for (let i of spaces.keys())
 			for (let kbd of kbds)
-				if (kbd.innerText == spaces[i].innerText)
+				if (kbd.innerText == spaces[i].innerText.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase())
 				{
 					if (kbd.classList.contains("right"))
 						break
@@ -301,19 +300,15 @@ Game = function()
 					if (kbd.classList.contains("wrong") && check_result[i] === "wrong")
 						break
 					else
-						kbd.classList.remove("wrong")
+						kbd.classList.remove("near")
 
-					let anim_name = "reveal_key"
 					if (kbd.classList.contains("near"))
 					{
 						if (check_result[i] != "right")
 							break
-
-						anim_name = "reveal_key_from_near"
 						kbd.classList.remove("near")
 					}
 					kbd.classList.add(check_result[i])
-					kbd.style.animation = anim_name + " .25s ease-in "+anim_duration*7/3+"s both"
 					break
 				}
 
