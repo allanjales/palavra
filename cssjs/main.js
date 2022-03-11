@@ -258,7 +258,14 @@ Game = function()
 		for (const space of spaces)
 		{
 			if (space.innerText == "")
+			{
+				let row = document.querySelector(".edit_row")
+				row.style.animation = null
+				row.offsetHeight
+				row.style.animation = "shake 0.25s ease-in-out"
+				this.show_notification("A palavra deve ter 5 letras")
 				return
+			}
 			word += space.innerText
 		}
 
