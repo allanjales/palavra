@@ -13,7 +13,7 @@
 	--background-color: #1c2732;
 	--letter-space-border-color: #38444d;
 	--right: #43A047;
-	--near: #ea9a3e;
+	--near: #cc842a;
 	--wrong: #17191c;
 	--bar-color: #38F;
 }
@@ -164,7 +164,7 @@ header button span
 
 #board
 {
-	width: 80%;
+	width: 75%;
 	max-width: 420px;
 	display: flex;
 	justify-content: center;
@@ -242,7 +242,8 @@ header button span
 #keyboard
 {
 	width: 100%;
-	height: 25%;
+	height: 30%;
+	max-height: 240px;
 	display: grid;
 	gap: 5px;
 	grid-template-rows: repeat(3, 1fr);

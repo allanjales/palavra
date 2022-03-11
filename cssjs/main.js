@@ -57,6 +57,34 @@ Game = function()
 			this.space()
 		else if (event.keyCode == 186)	//ç
 			this.add_letter("c")
+		else if (event.keyCode == 37)
+			cursor_walk(-1)
+		else if (event.keyCode == 39)
+			cursor_walk(1)
+	}
+
+	this.cursor_walk = function(direction)
+	{
+		cursor_pos = null
+		let spaces = document.querySelectorAll(".edit_row .letter_space")
+		for (i of spaces.keys())
+		{
+			if (spaces[i].classList.contains("edit_letter"))
+				cursor_pos = i
+
+			spaces[i].classList.remove("edit_letter")
+		}
+
+		if (cursor_pos !== null)
+		{
+			new_pos = (cursor_pos+direction+5)%5
+			spaces[new_pos].classList.add("edit_letter")
+			return
+		}
+		
+		if (spaces)
+			spaces[i].classList.add("edit_letter")
+
 	}
 
 	this.add_letter = function(letter)
@@ -195,6 +223,7 @@ Game = function()
 								break
 							kbd.classList.remove("near")
 						}
+						kbd.classList.remove("wrong")
 						kbd.classList.add(check_result[j])
 						break
 					}
@@ -315,6 +344,7 @@ Game = function()
 							break
 						kbd.classList.remove("near")
 					}
+					kbd.classList.remove("wrong")
 					kbd.classList.add(check_result[i])
 					break
 				}
