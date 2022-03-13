@@ -518,6 +518,7 @@ button
 	#stats .distribution
 	{
 		gap: 3px;
+		margin-right: 10px;
 	}
 
 	#stats p, span, #help p

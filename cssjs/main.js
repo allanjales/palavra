@@ -49,17 +49,17 @@ Game = function()
 	{
 		if (event.keyCode >= 65 && event.keyCode <= 90)
 			this.add_letter(String.fromCharCode(event.which))
-		else if (event.keyCode == 13)	//Enter
+		else if (event.key == "Enter")	//Enter
 			this.enter()
-		else if (event.keyCode == 8)	//Backspace
+		else if (event.key == "Backspace")	//Backspace
 			this.backspace()
-		else if (event.keyCode == 32)	//Space
+		else if (event.key == " ")	//Space
 			this.space()
-		else if (event.keyCode == 186)	//ç
-			this.add_letter("c")
-		else if (event.keyCode == 37)
+		else if (event.key.toUpperCase() == "Ç")	//ç
+			this.add_letter("C")
+		else if (event.key == "ArrowLeft")
 			cursor_walk(-1)
-		else if (event.keyCode == 39)
+		else if (event.key == "ArrowRight")
 			cursor_walk(1)
 	}
 
