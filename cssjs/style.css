@@ -12,9 +12,11 @@
 	/*New according to twitter*/
 	--background-color: #1c2732;
 	--letter-space-border-color: #38444d;
+	--letter-color: #F6F6F6;
 	--right: #43A047;
 	--near: #cc842a;
 	--wrong: #17191c;
+	--wrong-keyboard-letter: #666;
 	--bar-color: #38F;
 }
 
@@ -31,7 +33,7 @@ body
 {
 	user-select: none;
 	font-family: 'Rubik', sans-serif;
-	color: #FFF;
+	color: var(--letter-color);
 }
 
 html, body, .holder
@@ -150,8 +152,8 @@ header button span
 
 @keyframes reveal_letter
 {
-	0%       {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: solid; background-color: var(--from-color);  color: #FFF}
-	49.9999% {-webkit-transform: perspective(300px) rotateY(90deg);  border-style: solid; background-color: var(--from-color);  color: #FFF}
+	0%       {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: solid; background-color: var(--from-color);  color: var(--letter-color)}
+	49.9999% {-webkit-transform: perspective(300px) rotateY(90deg);  border-style: solid; background-color: var(--from-color);  color: var(--letter-color)}
 	50%      {-webkit-transform: perspective(300px) rotateY(-90deg); border-style: none;  background-color: var(--to-bg-color); color: var(--to-tx-color)}
 	100%     {-webkit-transform: perspective(300px) rotateY(0deg);   border-style: none;  background-color: var(--to-bg-color); color: var(--to-tx-color)}
 }
@@ -164,6 +166,7 @@ header button span
 
 #board
 {
+	aspect-ratio: 5 / 6;
 	width: 75%;
 	max-width: 420px;
 	display: flex;
@@ -217,7 +220,7 @@ header button span
 {
 	background-color: var(--right);
 	--to-bg-color: var(--right);
-	--to-tx-color: #FFF;
+	--to-tx-color: var(--letter-color);
 	color: var(--to-tx-color);
 }
 
@@ -225,7 +228,7 @@ header button span
 {
 	background-color: var(--near);
 	--to-bg-color: var(--near);
-	--to-tx-color: #FFF;
+	--to-tx-color: var(--letter-color);
 	color: var(--to-tx-color);
 }
 
@@ -233,8 +236,13 @@ header button span
 {
 	background-color: var(--wrong);
 	--to-bg-color: var(--wrong);
-	--to-tx-color: #888;
+	--to-tx-color: var(--letter-color);
 	color: var(--to-tx-color);
+}
+
+#keyboard .wrong
+{
+	--to-tx-color: var(--wrong-keyboard-letter);
 }
 
 /*Keyboard*/
