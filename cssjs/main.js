@@ -335,8 +335,6 @@ Game = function()
 
 					if (kbd.classList.contains("wrong") && check_result[i] === "wrong")
 						break
-					else
-						kbd.classList.remove("near")
 
 					if (kbd.classList.contains("near"))
 					{
